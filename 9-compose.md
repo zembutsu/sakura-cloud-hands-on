@@ -1,51 +1,59 @@
-﻿#8. Dockerfile
+﻿#9. Docker Compose
 
-8.1. ディレクトリの作成と移動
-
-```
-mkdir myimage
-cd myimage
-```
-
-
-8.2. エディタで Dockerfile を作成
+9.1. Docker Compose をセットアップ
 
 ```
-vim Dockerfile
+curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 ```
 
-ファイル内容は
+9.2. インストールを確認
 
 ```
-FROM ubuntu
-RUN apt-get update
-RUN apt-get install -y wget
+docker-compose  version
 ```
 
-* ``a`` を入力してモード変換
-* 終了は ``ESC`` キーを一度押してから ``:wq`` エンターを入力
-
-あるいは、以下のコマンドを実行
+9.3. [docker-compose.yaml](./rocketchat/docker-dompose.yaml) の作成
 
 ```
-cat << EOF > ./Dockerfile
-FROM ubuntu
-RUN apt-get update
-RUN apt-get install -y wget
-EOF
+git clone \ https://github.com/zembutsu/sakura-cloud-hands-on.git
+cd sakura-cloud-hands-on/rocketchat
 ```
 
-8.3. ``myimage`` イメージをビルド
+9.4. イメージの取得
 
 ```
-docker build -t myimage .
+docker-compose pull
 ```
 
-8.4 コンテナの実行
+9.5. イメージを確認
 
 ```
-docker run -it myimage bash
+docker images
 ```
- 
-[次へ](9-compose.md)
+
+9.6. compose で複数のコンテナを起動
+
+```
+docker-compose up -d
+```
+
+9.7. コンテナを確認
+
+```
+docker ps
+```
+
+9.8. firewalld で通信を許可
+
+```
+firewall-cmd --add-port=3000/tcp --zone=public --permanent
+firewall-cmd --reload
+```
+
+9.10 ブラウザで ``http://<ip>:3000`` を確認
+
+[目次](README.md)
+
+
 
